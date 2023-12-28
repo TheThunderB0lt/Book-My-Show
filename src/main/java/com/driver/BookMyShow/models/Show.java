@@ -27,7 +27,7 @@ public class Show {
     @ManyToOne // A particular Show runs in multiple screens (M:1)
     Screen screen;
 
-    int availableTicket;
+    int availableTickets;
     Date startTime;
     Date endTime;
     int ticketPrice;

@@ -17,7 +17,7 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.AUTO)
     UUID id;
 
-    String Name;
+    String name;
     String directorName;
     String actorName;
     String actressName;
