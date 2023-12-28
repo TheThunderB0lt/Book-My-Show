@@ -1,5 +1,6 @@
 package com.driver.BookMyShow.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,12 +19,15 @@ public class Show {
     @GeneratedValue(strategy = GenerationType.AUTO)
     UUID id;
 
+    @JsonIgnore
     @ManyToOne //Many shows will run in 1 particular hall (M:1)
     Hall hall; //In which particular hall the show is running
 
+    @JsonIgnore
     @ManyToOne
     Movie movie;
 
+    @JsonIgnore
     @ManyToOne // A particular Show runs in multiple screens (M:1)
     Screen screen;
 
