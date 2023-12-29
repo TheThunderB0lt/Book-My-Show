@@ -3,6 +3,7 @@ package com.driver.BookMyShow.service;
 import com.driver.BookMyShow.dto.request.MovieOwnerSignupDTO;
 import com.driver.BookMyShow.models.ApplicationUser;
 import com.driver.BookMyShow.models.Movie;
+import com.driver.BookMyShow.models.Ticket;
 import com.driver.BookMyShow.repository.ApplicationUserRepository;
 import com.driver.BookMyShow.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,5 +40,17 @@ public class MovieService {
 
     public Movie getMovieById(UUID id) {
         return movieRepository.findById(id).orElse(null);
+    }
+
+    public int getTotalTicketCount(Movie movie) {
+        return movie.getTickets().size();
+    }
+
+    public int boxOfficeCollection(Movie movie) {
+        int totalIncome = 0;
+        for (Ticket tickets : movie.getTickets()) {
+            totalIncome += tickets.getShow().getTicketPrice();
+        }
+        return totalIncome;
     }
 }

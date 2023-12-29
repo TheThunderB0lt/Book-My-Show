@@ -2,7 +2,9 @@ package com.driver.BookMyShow.repository;
 
 import com.driver.BookMyShow.models.Hall;
 import com.driver.BookMyShow.models.Show;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -20,4 +22,9 @@ public interface ShowRepository extends JpaRepository<Show, UUID> {
 
     @Query(value = "select * from show where hall_id=:hallId and movie_id=:movieId", nativeQuery = true)
     public List<Show> getShowByHallIdAndMovieId(UUID hallId, UUID movieId);
+
+    @Transactional
+    @Modifying
+    @Query(value = "update show set available_tickets=:updatedTicketCount where id=:id", nativeQuery = true)
+    public void updateAvailableTicketCount(UUID id, int updatedTicketCount);
 }
