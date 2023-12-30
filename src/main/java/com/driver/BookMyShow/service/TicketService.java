@@ -32,6 +32,9 @@ public class TicketService {
     @Autowired
     MailService mailService;
 
+    @Autowired
+    BarCodeGenerationService barCodeGenerationService;
+
     public Ticket buyTicket(String email, UUID showId) {
         //1. get user by email
         ApplicationUser user = applicationUserRepository.findByEmail(email);
@@ -50,6 +53,7 @@ public class TicketService {
         if (show == null) {
             throw new ResourcesNotExistException(String.format("Show with %s does not exist in our system", showId));
         }
+
         //we have to decrease ticket count for a particular showID, as we're buying on ticket
         showService.updateAvailableTicketCount(show);
         Ticket ticket = new Ticket();
@@ -64,27 +68,42 @@ public class TicketService {
 
         //First send ticket details to user
         String userMessage = String.format("Hey %s,\n" +
-                "Congratulation your ticket got booked on our MovieBooker. Below are your ticket details.\n" +
+                "Congratulations! Your ticket got booked on our MovieBooker. Below are your ticket details.\n \n" +
                 "1. Movie Name: %s\n" +
                 "2. Hall Name : %s\n" +
                 "3. Hall Address : %s\n" +
                 "4. Date and Time : %s\n" +
-                "5. Ticket Price : %d\n" +
-                "Hope you enjoy the show!\n" +
-                "MovieBooker", user.getName(), movie.getName(), hall.getName(), hall.getAddress(), show.getStartTime().toString(), show.getTicketPrice());
+                "5. Ticket Price : %d\n \n" +
+                "Hope you enjoy the show!\n \n \n" +
+                "\nMovieBooker", user.getName(), movie.getName(), hall.getName(), hall.getAddress(), show.getStartTime().toString(), show.getTicketPrice());
 
-        String userSub = String.format("Congratulation! %s your ticked got generated", user.getName());
-        mailService.generateMail(user.getEmail(), userSub, userMessage);
+        String userSub = String.format("Congratulation! %s your ticket got generated", user.getName());
 
+        //Whatever text we passed, we'll generate QRCode for that text
+        //when user scan that QRCode, it'll show all the details of the movie ticket.
+        try {
+            barCodeGenerationService.generateQR(userMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //Sending generated QRCode image to user email
+        mailService.generateMail(user.getEmail(), userSub, userMessage, "./src/main/resources/static/QRCode.png");
+
+        //We'll generate mail for the above text, it'll send that mail text to user
+//        mailService.generateMail(user.getEmail(), userSub, userMessage);
+
+        // We are generating mail for movie owner for total income & ticket sold
         int totalTickets = movieService.getTotalTicketCount(movie);
         int totalIncome = movieService.boxOfficeCollection(movie);
 
-        String movieMessage = String.format("Congratulation %s," +
-                "/nYour movie ticket got sold" +
-                "\n1. Total Ticket : %d" +
-                "\n2. Total Income : %d", movie.getOwner().getName(), totalTickets, totalIncome);
+        String movieMessage = String.format("Congratulations %s,\n" +
+                "\nYour movie ticket got sold \n" +
+                "\n1. Total Ticket Sold: %d" +
+                "\n2. Your Total Income : %d", movie.getOwner().getName(), totalTickets, totalIncome);
 
-        String movieSubject = String.format("Congratulation %s One more ticket sold", movie.getOwner().getName());
+        String movieSubject = String.format("Congratulations %s One more ticket sold", movie.getOwner().getName());
+
         mailService.generateMail(movie.getOwner().getEmail(), movieSubject, movieMessage);
 
         return ticket;
