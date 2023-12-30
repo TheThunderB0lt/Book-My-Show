@@ -1,5 +1,6 @@
 package com.driver.BookMyShow.models;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,9 +13,11 @@ import java.util.UUID;
 @Setter
 @ToString
 @Entity
+@Schema(description = "This represent Hall model.")
 public class Hall {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY, example = "jksdfhjksdvjkbcvsdhjk")
     UUID id;
 
     String name;

@@ -2,6 +2,7 @@ package com.driver.BookMyShow.controller;
 
 import com.driver.BookMyShow.models.Show;
 import com.driver.BookMyShow.service.ShowService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+@Tag(name = "Show API", description = "This controller contains all the Show related service endpoint details.")
 @RestController
 @RequestMapping("/show")
 public class ShowController {
