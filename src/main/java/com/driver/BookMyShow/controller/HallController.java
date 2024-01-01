@@ -2,7 +2,7 @@ package com.driver.BookMyShow.controller;
 
 import com.driver.BookMyShow.dto.request.AddScreenDTO;
 import com.driver.BookMyShow.dto.request.AddShowDTO;
-import com.driver.BookMyShow.dto.request.GeneralMessageDTO;
+import com.driver.BookMyShow.dto.response.GeneralMessageDTO;
 import com.driver.BookMyShow.dto.request.HallOwnerSignupDTO;
 import com.driver.BookMyShow.exceptions.ResourcesNotExistException;
 import com.driver.BookMyShow.exceptions.UnAuthorized;

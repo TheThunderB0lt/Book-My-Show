@@ -1,4 +1,4 @@
-package com.driver.BookMyShow.dto.request;
+package com.driver.BookMyShow.dto.response;
 
 import lombok.*;
 
@@ -8,5 +8,5 @@ import lombok.*;
 @Setter
 @ToString
 public class GeneralMessageDTO {
-    String msg;
+    String message;
 }
